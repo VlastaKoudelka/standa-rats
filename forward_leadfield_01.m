@@ -3,7 +3,6 @@ clear all;
 close all;
 %% Nastavení cesty k fieldtrip toolboxu
 restoredefaultpath
-%addpath C:\fieldtrip-20180204 %PC
 addpath C:\fieldtrip-20180309 %Notebook
 ft_defaults
 
