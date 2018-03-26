@@ -2,3 +2,22 @@ do konzultace 26.3.
 	mesh z magnetické rezonance (ètyøstìny) - hotovo
 	sit elektrod jako vrcholù a jeden dipol vyzkoušet (rozložení potenciálu po povrchu) - hotovo
 	udìlat body grid max 100 000 a pro 12 elektrod spoèítat leadfield (diskretizace prostoru pro zdroje) - hotovo
+
+do konzultace N/A
+	
+	1)
+	nacist atlas do FT 
+	http://www.3dbar.org:8080/getPreview?cafDatasetName=CBWJ13_P80;structureName=Brain
+	ft_read_atlas
+	
+	2)
+	v source modelu vybrat dipoly spadajici do funkcnich oblasti mozku (kde je ocekavana aktivity-nebrat brainstem, Anterior commissure, ...)
+	
+	3)
+	v jednoum zdroji v hippocampu vygenerovat cos(2*pi*f*t) + šum
+	fz = 1000Hz	
+ 	frekvence f = 35Hz
+	delka segmentu Ts = 1mins
+	zobrazit potenciály pro MomX,MomY,MomZ
+	 
+	  

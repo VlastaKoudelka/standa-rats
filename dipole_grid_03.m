@@ -53,7 +53,7 @@ figure('Name','Mesh + eldy + topo + osy potencial')
 hold on
 ft_plot_topo3d(leadfield.cfg.elec.chanpos,potencial,'facealpha',0.6,'refine',5);
 ft_plot_sens(elec,'style','r.');
-ft_plot_mesh(mesh,'surfaceonly','yes','facealpha',0.2,'edgealpha',0.2) ;
+ft_plot_mesh(mesh,'surfaceonly','yes','facealpha',0.2) ;
 line(linspace(-13,13,200),ones(1,200)*sourcemodel.pos(dipole,2),ones(1,200)*sourcemodel.pos(dipole,3),'LineWidth',2,'Color','r')
 line(ones(1,200)*sourcemodel.pos(dipole,1),linspace(-20,15,200),ones(1,200)*sourcemodel.pos(dipole,3),'LineWidth',2,'Color','g')
 line(ones(1,200)*sourcemodel.pos(dipole,1),ones(1,200)*sourcemodel.pos(dipole,2),linspace(-10,10,200),'LineWidth',2,'Color','b')
