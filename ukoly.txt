@@ -1,0 +1,4 @@
+do konzultace 26.3.
+	mesh z magnetické rezonance (ètyøstìny) - hotovo
+	sit elektrod jako vrcholù a jeden dipol vyzkoušet (rozložení potenciálu po povrchu) - hotovo
+	udìlat body grid max 100 000 a pro 12 elektrod spoèítat leadfield (diskretizace prostoru pro zdroje) - hotovo
