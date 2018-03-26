@@ -22,25 +22,26 @@ segMri.unit  = 'mm'; % Urèení jednotek
 segMri.brain = brain; % Pøeøazení matice vysegmentovaného mozku
 
 %% Podvzorkování MRI
-cfg            = [];
-cfg.downsample = 2; % Podvzorkování 2x ... 4 voxely -> 1 voxel
-[mridown]      = ft_volumedownsample(cfg,segMri); % Pro použitelnou velikost 
+% cfg            = [];
+% cfg.downsample = 2; % Podvzorkování 2x ... 4 voxely -> 1 voxel
+% [mridown]      = ft_volumedownsample(cfg,segMri); % Pro použitelnou velikost 
 
 %% Prepare mesh - vytvoøení meshe z MRI
 cfg              = [];
 cfg.method       = 'tetrahedral';
-mesh             = ft_prepare_mesh(cfg,mridown);
+cfg.downsample   = 4;
+mesh             = ft_prepare_mesh(cfg,segMri);
 mesh.labels      = ones(size(mesh.tet,1),1);
 mesh.tissue      = ones(size(mesh.tet,1),1);
 mesh.tissuelabel = {'brain'};
 mesh.tet         = [mesh.tet(:,1:2) mesh.tet(:,4) mesh.tet(:,3)];
-% figure('Name','Mesh + souøadné osy')
-% hold on
-% ft_plot_mesh(mesh,'surfaceonly','yes','facecolor','brain') 
-% line(linspace(-13,13,200),zeros(1,200),zeros(1,200),'LineWidth',2,'Color','r')
-% line(zeros(1,200),linspace(-20,15,200),zeros(1,200),'LineWidth',2,'Color','g')
-% line(zeros(1,200),zeros(1,200),linspace(-10,10,200),'LineWidth',2,'Color','b')
-% hold off
+figure('Name','Mesh + souøadné osy')
+hold on
+ft_plot_mesh(mesh,'surfaceonly','yes','facecolor','brain') 
+line(linspace(-13,13,200),zeros(1,200),zeros(1,200),'LineWidth',2,'Color','r')
+line(zeros(1,200),linspace(-20,15,200),zeros(1,200),'LineWidth',2,'Color','g')
+line(zeros(1,200),zeros(1,200),linspace(-10,10,200),'LineWidth',2,'Color','b')
+hold off
 
 %% Vodivostní model = head model
 cfg              = [];
@@ -59,13 +60,13 @@ elec.pnt = [electrodeTable.X,electrodeTable.Y,electrodeTable.Z];
 elec.elecpos = elec.pnt;
 elec.unit = 'mm';
 
-[headmodel, elec] = ft_prepare_vol_sens(headmodel, elec); % Úprava pozic elektrod pro pøiléhání
+% [headmodel, elec] = ft_prepare_vol_sens(headmodel, elec); % Úprava pozic elektrod pro pøiléhání
 
-% figure('Name','Mesh + elektrody')
-% hold on
-% ft_plot_mesh(mesh2,'surfaceonly','yes','facecolor','brain') 
-% ft_plot_sens(elec,'style','r.');
-% hold off
+figure('Name','Mesh + elektrody')
+hold on
+ft_plot_mesh(mesh,'surfaceonly','yes','facecolor','brain');
+ft_plot_sens(elec,'style','r.');
+hold off
 
 %% Source model = headmodel + pozice elektrod + pozice dopólù
 cfg                 = [];
@@ -88,7 +89,7 @@ potencial = leadfield.leadfield{1};
 potencial = sqrt(potencial(:,1).^2 + potencial(:,2).^2 + potencial(:,3).^2);
 
 %% Rozložení potenciálu po povrchu mozku
-leadfield.cfg.elec.chanpos(:,3) = leadfield.cfg.elec.chanpos(:,3) - 0.7;
+leadfield.cfg.elec.chanpos(:,3) = leadfield.cfg.elec.chanpos(:,3) + 0.7;
 figure('Name','Mesh + eldy + topo + osy potencial')
 hold on
 ft_plot_topo3d(leadfield.cfg.elec.chanpos,potencial,'facealpha',0.6,'refine',5);
