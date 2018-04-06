@@ -5,15 +5,15 @@ do konzultace 26.3.
 
 do konzultace N/A
 	
-	1)
+	1) - hotovo
 	nacist atlas do FT 
 	http://www.3dbar.org:8080/getPreview?cafDatasetName=CBWJ13_P80;structureName=Brain
 	ft_read_atlas
 	
-	2)
+	2) - hotovo
 	v source modelu vybrat dipoly spadajici do funkcnich oblasti mozku (kde je ocekavana aktivity-nebrat brainstem, Anterior commissure, ...)
 	
-	3)
+	3) - hotovo
 	v jednoum zdroji v hippocampu vygenerovat cos(2*pi*f*t) + šum
 	fz = 1000Hz	
  	frekvence f = 35Hz
