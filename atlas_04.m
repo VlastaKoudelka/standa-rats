@@ -86,7 +86,7 @@ for i=1:length(signal)
     signal_leadfield{i} = signal(i)*zdroj_leadfield;
 end
 
-figure
+figure('Name',labels.Name{oblast});
 hold on
 subplot(2,2,1)
 scatter3(gridinside(zdroj,1),gridinside(zdroj,2),gridinside(zdroj,3),...
@@ -98,6 +98,7 @@ text(6,0,0,'+X');
 text(-8,0,0,'-X');
 text(0.5,6,0,'+Y');
 text(0,-11,0,'-Y');
+
 
 for i=1:length(signal)
     potencial = maska(1)*signal_leadfield{i}(:,1) +...
@@ -112,7 +113,11 @@ for i=1:length(signal)
     ft_plot_topo3d(leadfield.cfg.elec.chanpos,potencial,'facealpha',0.6,'refine',2); % NUDZ
     text(0,6,8,'+Y');
     text(0,-11.5,8,'-Y');
-    view(90,0);
+    
+    if i<90
+    view(i,90-i);
+    end
+    
     line(zeros(1,200),linspace(-10,6,200),8*ones(1,200),'LineWidth',2,'Color','g');
     scatter3(gridinside(zdroj,1),gridinside(zdroj,2),gridinside(zdroj,3),...
     'MarkerEdgeColor','k',...
