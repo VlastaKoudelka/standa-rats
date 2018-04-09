@@ -20,4 +20,14 @@ do konzultace N/A
 	delka segmentu Ts = 1mins
 	zobrazit potenciály pro MomX,MomY,MomZ
 	 
-	  
+do konzultace 
+	
+	1) vytvoøit èasové øady potenciálù pro všechny elektrody (matice ne X nt) - pøi definovaném SNR (db)
+	
+	2) zabudovat data do formátu FieldTripu (http://www.fieldtriptoolbox.org/faq/how_can_i_import_my_own_dataformat)
+
+	3) segmetovat data (ft_preprocessing) na 2s segmenty
+
+	4) už ne úkol - ft_freqanalysis, ft_sourceanalysis (http://www.fieldtriptoolbox.org/tutorial/beamformer)
+
+	cíl: lokalizovat pøedem známý zdroj, eventuálnì více zdrojù (celý hipocampus)
