@@ -1,14 +1,14 @@
 clc;clear;close all;
 ft_defaults;
 %% Naètení potøebných souborù
-load('mesh4down'); %mesh
-load('headmodel4down'); %headmodel
-load('elec'); %NUDZ elektrody
-load('gridinside'); %Grid uvnitø mozku
+load('mesh4down'); % mesh
+load('headmodel4down'); % headmodel
+load('elec'); % NUDZ elektrody
+load('gridinside'); % Grid uvnitø mozku
 load('SRC/CBWJ13_P80_indexed_volume/lut.mat'); % lut pro atlas
 load('atlas4down'); % atlas podvzorkovaný 4x
 load('sourcemodel'); % sourcemodel
-load('sourcemodel_atlas'); %sourcemodel + atlas = indexované zdroje
+load('sourcemodel_atlas'); % sourcemodel + atlas = indexované zdroje
 load('leadfield'); % leadfield pro všechny zdroje (NUDZ elektrody)
 
 %% Naètení atlasu
@@ -25,15 +25,16 @@ atlas4down.unit='mm';
 % cfg.atlas = atlas4down;
 % cfg.funparameter = 'brick0';
 % cfg.funcolormap = 'lines';
-% ft_sourceplot(cfg, atlas4down)
-% imagesc(atlas4down.brick0(:,:,20);
+% ft_sourceplot(cfg, atlas4down);
 % 
+% imagesc(atlas4down.brick0(:,:,20)); % 1 øez kolmý na osu z
+% 
+% figure
 % for i = 1:size(atlas4down.brick0,3)
 %     hold on
 %     imagesc(atlas4down.brick0(:,:,i));
 %     pause(0.1);
 % end
- 
 
 
 %% Pøiøazení atlasu k sourcemodelu = indexování zdrojù
@@ -61,6 +62,9 @@ for i=1:size(labels,1)
     'MarkerEdgeColor','None','MarkerFaceColor',...
     [labels.Red(i)/255 labels.Green(i)/255 labels.Blue(i)/255]);
 end
+zlim([-25 15]);
+xlim([-9 9]);
+ylim([-25 15]);
 hold off;
 
 %% Generování cosinusovky ve vybrané oblasti
@@ -80,7 +84,7 @@ zdroj_leadfield  = leadfield.leadfield(zdroj); % Pro NUDZ elektrody
 zdroj_leadfield  = zdroj_leadfield{1};
 signal_leadfield = cell(1,length(signal));
 
-maska = [1 0 0]; % V jakých osách jde signál
+maska = [1 0 0]; % V jakých osách jde signál [x y z];
 
 for i=1:length(signal)
     signal_leadfield{i} = signal(i)*zdroj_leadfield;
@@ -102,7 +106,7 @@ text(0,-11,0,'-Y');
 
 for i=1:length(signal)
     potencial = maska(1)*signal_leadfield{i}(:,1) +...
-                maska(2)*signal_leadfield{i}(:,2) + maska(3)*signal_leadfield{i}(:,3);
+                maska(2)*signal_leadfield{i}(:,2) + maska(3)*signal_leadfield{i}(:,3);      
     subplot(2,2,1)
     title('potenciál mezi elektrodami + osy + zdroj');
     ft_plot_topo3d(leadfield.cfg.elec.chanpos,potencial,'facealpha',0.6,'refine',2); % NUDZ
