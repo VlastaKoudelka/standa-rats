@@ -48,7 +48,7 @@ dipole = 780; % Poøadové èíslo dipólu
 potencial = leadfield.leadfield{dipole};
 potencial = sqrt(potencial(:,1).^2 + potencial(:,2).^2 + potencial(:,3).^2);
 
-% leadfield.cfg.elec.chanpos(:,3) = leadfield.cfg.elec.chanpos(:,3) + 0.7;
+leadfield.cfg.elec.chanpos(:,3) = leadfield.cfg.elec.chanpos(:,3) + 0.7;
 figure('Name','Mesh + eldy + topo + osy potencial')
 hold on
 ft_plot_topo3d(leadfield.cfg.elec.chanpos,potencial,'facealpha',0.6,'refine',5);

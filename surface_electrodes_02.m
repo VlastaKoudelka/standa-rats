@@ -33,8 +33,8 @@ leadfield1 = ft_prepare_leadfield(cfg);
 
 potencial = leadfield1.leadfield{1};
 potencial = sqrt(potencial(:,1).^2 + potencial(:,2).^2 + potencial(:,3).^2);
-dipMom = [0,0,-1];
-potencial = dipMom * leadfield1.leadfield{1}';
+% dipMom = [0,0,-1];
+% potencial = dipMom * leadfield1.leadfield{1}';
 
 % [headmodel, elec] = ft_prepare_vol_sens(headmodel, elec); % Úprava pozic elektrod pro pøiléhání
 
