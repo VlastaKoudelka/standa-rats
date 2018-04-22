@@ -3,7 +3,7 @@ do konzultace 26.3.
 	sit elektrod jako vrcholù a jeden dipol vyzkoušet (rozložení potenciálu po povrchu) - hotovo
 	udìlat body grid max 100 000 a pro 12 elektrod spoèítat leadfield (diskretizace prostoru pro zdroje) - hotovo
 
-do konzultace N/A
+do konzultace 9.4.
 	
 	1) - hotovo
 	nacist atlas do FT 
@@ -19,5 +19,16 @@ do konzultace N/A
  	frekvence f = 35Hz
 	delka segmentu Ts = 1mins
 	zobrazit potenciály pro MomX,MomY,MomZ
-	 
+
+do konzultace  23.4.
+   
+  1) vytvoøit èasové øady potenciálù pro všechny elektrody (matice ne X nt) - pøi definovaném SNR (dB) - Hotovo
+   
+  2) zabudovat data do formátu FieldTripu (http://www.fieldtriptoolbox.org/faq/how_can_i_import_my_own_dataformat) - Hotovo
+ 
+  3) segmetovat data (ft_preprocessing) na 2s segmenty - Hotovo 
+ 
+  4) už ne úkol - ft_freqanalysis, ft_sourceanalysis (http://www.fieldtriptoolbox.org/tutorial/beamformer)
+ 
+  cíl: lokalizovat pøedem známý zdroj, eventuálnì více zdrojù (celý hippocampus)
 	  
