@@ -69,7 +69,6 @@ cfg.foi       = 35; % která frekvence nás zajímá
 cfg.pad       = 'nextpow2'; % prodloužení poètu vzorkù na mocninu 2 pro fft
 freq          = ft_freqanalysis(cfg, data_preproc);
 
-
 %% Analýza zdrojù
 cfg                   = []; 
 cfg.method            = 'dics';
@@ -81,4 +80,23 @@ cfg.dics.lambda       = 0;
 cfg.elec              = elec;
 
 sourcePost_nocon       = ft_sourceanalysis(cfg, freq);
+
+%% Interpolace ze sourcemodel na MRI (volume)
+
+cfg = [];
+cfg.interpmethod = 'nearest';
+cfg.parameter = 'pow';
+cfg.downsample = 4;
+
+sourceInt = ft_sourceinterpolate(cfg,sourcePost_nocon,mri);
+
+%% Zobrazeni
+
+cfg = [];
+cfg.funparameter = 'pow';
+ft_sourceplot(cfg,sourceInt)
+
+
+
+
 
