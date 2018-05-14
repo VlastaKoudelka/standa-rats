@@ -22,9 +22,9 @@ segMri.unit  = 'mm'; % Urèení jednotek
 segMri.brain = brain; % Pøeøazení matice vysegmentovaného mozku
 
 %% Podvzorkování MRI
-% cfg            = [];
-% cfg.downsample = 2; % Podvzorkování 2x ... 4 voxely -> 1 voxel
-% [mridown]      = ft_volumedownsample(cfg,segMri); % Pro použitelnou velikost 
+cfg            = [];
+cfg.downsample = 2; % Podvzorkování 2x ... 4 voxely -> 1 voxel
+[mridown]      = ft_volumedownsample(cfg,segMri); % Pro použitelnou velikost 
 
 %% Prepare mesh - vytvoøení meshe z MRI
 cfg              = [];

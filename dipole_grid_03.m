@@ -30,7 +30,7 @@ scatter3(gridinside(:,1),gridinside(:,2),gridinside(:,3));
 %% Source model = headmodel + pozice elektrod + pozice dopólù
 cfg                 = [];
 cfg.headmodel       = headmodel;
-cfg.sourceunits     = headmodel.unit;
+cfg.grid.unit       = headmodel.unit;
 cfg.elec            = elec;
 cfg.grid.pos        = gridinside;
 sourcemodel         = ft_prepare_sourcemodel(cfg);

@@ -1,7 +1,7 @@
 do konzultace 26.3.
-	mesh z magnetické rezonance (ètyøstìny) - hotovo
-	sit elektrod jako vrcholù a jeden dipol vyzkoušet (rozložení potenciálu po povrchu) - hotovo
-	udìlat body grid max 100 000 a pro 12 elektrod spoèítat leadfield (diskretizace prostoru pro zdroje) - hotovo
+	mesh z magnetickï¿½ rezonance (ï¿½tyï¿½stï¿½ny) - hotovo
+	sit elektrod jako vrcholï¿½ a jeden dipol vyzkouï¿½et (rozloï¿½enï¿½ potenciï¿½lu po povrchu) - hotovo
+	udï¿½lat body grid max 100 000 a pro 12 elektrod spoï¿½ï¿½tat leadfield (diskretizace prostoru pro zdroje) - hotovo
 
 do konzultace 9.4.
 	
@@ -14,30 +14,29 @@ do konzultace 9.4.
 	v source modelu vybrat dipoly spadajici do funkcnich oblasti mozku (kde je ocekavana aktivity-nebrat brainstem, Anterior commissure, ...)
 	
 	3) - hotovo
-	v jednoum zdroji v hippocampu vygenerovat cos(2*pi*f*t) + šum
+	v jednoum zdroji v hippocampu vygenerovat cos(2*pi*f*t) + ï¿½um
 	fz = 1000Hz	
  	frekvence f = 35Hz
 	delka segmentu Ts = 1mins
-	zobrazit potenciály pro MomX,MomY,MomZ
+	zobrazit potenciï¿½ly pro MomX,MomY,MomZ
 
 do konzultace  23.4.
    
-  1) vytvoøit èasové øady potenciálù pro všechny elektrody (matice ne X nt) - pøi definovaném SNR (dB) - Hotovo
+  1) vytvoï¿½it ï¿½asovï¿½ ï¿½ady potenciï¿½lï¿½ pro vï¿½echny elektrody (matice ne X nt) - pï¿½i definovanï¿½m SNR (dB) - Hotovo
    
-  2) zabudovat data do formátu FieldTripu (http://www.fieldtriptoolbox.org/faq/how_can_i_import_my_own_dataformat) - Hotovo
+  2) zabudovat data do formï¿½tu FieldTripu (http://www.fieldtriptoolbox.org/faq/how_can_i_import_my_own_dataformat) - Hotovo
  
   3) segmetovat data (ft_preprocessing) na 2s segmenty - Hotovo 
  
-  4) už ne úkol - ft_freqanalysis, ft_sourceanalysis (http://www.fieldtriptoolbox.org/tutorial/beamformer)
+  4) uï¿½ ne ï¿½kol - ft_freqanalysis, ft_sourceanalysis (http://www.fieldtriptoolbox.org/tutorial/beamformer)
  
-  cíl: lokalizovat pøedem známý zdroj, eventuálnì více zdrojù (celý hippocampus)
+  cï¿½l: lokalizovat pï¿½edem znï¿½mï¿½ zdroj, eventuï¿½lnï¿½ vï¿½ce zdrojï¿½ (celï¿½ hippocampus)
 
-do konzultace 14.5.
-
-	1) zkontrolovat souøadnnné systémy a zobrazit zdroje (ft_sourceplot) v MRI prostoru
-	
-	2) zobrazit rozparcelované zdroje (existuje tutoriál na stránkách FT/ ft_sourceparcellate)
-
-	3) zkusit rùzné hodnoty cfg.lamda (source analysis)
-		
+do konzultace 14.5. 
+ 
+  1) zkontrolovat souï¿½adnï¿½ systï¿½my a zobrazit zdroje (ft_sourceplot) v MRI pros - hotovo
+   
+  2) zobrazit rozparcelovanï¿½ zdroje (existuje tutoriï¿½l na strï¿½nkï¿½ch FT/ ft_sourceparcelate) - hotovo
+ 
+  3) zkusit rï¿½znï¿½ hodnoty cfg.lamda (source analysis) - hotovo
 	  
