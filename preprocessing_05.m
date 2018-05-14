@@ -112,6 +112,17 @@ sourceInt.parcel = zeros(length(sourceInt.pow),1); % Vytvoøení nové promìnné pro
 for i=1:length(parcel.pow)
       sourceInt.parcel(find(atlas4down.brick0==i))=parcel.pow(i); % Pøiøazení støední hodnoty oblasti do všech voxelù oblasti
 end
+
+%% Skutecne zdroje
+
+cfg = [];
+cfg.method = 'mean'; % støední hodnota
+cfg.parcellation = 'brick0';
+parcel = ft_sourceparcellate(cfg, sourceInt, atlas4down); % Parcelace zdrojù
+sourceInt.trueSource = zeros(length(sourceInt.pow),1); % Vytvoøení nové promìnné pro uložení umelych zdroju
+
+sourceInt.trueSource(find(atlas4down.brick0==oblast))=1; % Pøiøazení støední hodnoty oblasti do všech voxelù oblasti
+
 %% Maska
 
 cfg = [];
@@ -122,6 +133,7 @@ mask = ft_volumelookup(cfg, sourceInt); %Vytvoøení masky pro zobrazení zdrojù po
 
 sourceInt.mask = mask;
 
+
 %% Zobrazení
 cfg = [];
 cfg.method = 'ortho';
@@ -131,22 +143,14 @@ cfg.atlas = atlas4down;
 %cfg.mesh = mesh;
 ft_sourceplot(cfg,sourceInt)
 
-
-%% Interpolace ze sourcemodel na MRI (volume)
-
+%% Zobrazení
 cfg = [];
-cfg.interpmethod = 'nearest';
-cfg.parameter = 'pow';
-cfg.downsample = 4;
-
-sourceInt = ft_sourceinterpolate(cfg,sourcePost_nocon,mri);
-
-%% Zobrazeni
-
-cfg = [];
-cfg.funparameter = 'pow';
+cfg.method = 'ortho';
+cfg.funparameter = 'trueSource'; % parcel-rozparcelované zdroje/pow-originál interpolované
+cfg.maskparameter = 'mask'; % maska
+cfg.atlas = atlas4down;
+%cfg.mesh = mesh;
 ft_sourceplot(cfg,sourceInt)
-
 
 
 

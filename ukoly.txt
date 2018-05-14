@@ -1,4 +1,4 @@
-do konzultace 26.3.
+﻿do konzultace 26.3.
 	mesh z magnetick� rezonance (�ty�st�ny) - hotovo
 	sit elektrod jako vrchol� a jeden dipol vyzkou�et (rozlo�en� potenci�lu po povrchu) - hotovo
 	ud�lat body grid max 100 000 a pro 12 elektrod spo��tat leadfield (diskretizace prostoru pro zdroje) - hotovo
@@ -40,9 +40,12 @@ do konzultace 14.5.
  
   3) zkusit r�zn� hodnoty cfg.lamda (source analysis) - hotovo
 	  
+do konzultace 11.6.
 
-	3) segmetovat data (ft_preprocessing) na 2s segmenty
+  1) zobrazit budici (umele) zdroje v sourceplot za ucelem porovnani s lokalizovanymi (ne-parcelovanymi) zdroji
+  
+  2) lokalizovat pomoci MNE, DICS pro různé úrovně labmda - ulozit obrazky (bod 1)
 
-	4) u� ne �kol - ft_freqanalysis, ft_sourceanalysis (http://www.fieldtriptoolbox.org/tutorial/beamformer)
+  3) vsechny vypocty provadet na celem pokryti mozku elektrodami (body 1 a 2)
 
-	c�l: lokalizovat p�edem zn�m� zdroj, eventu�ln� v�ce zdroj� (cel� hipocampus)
+  4) nastudovat CV (GCV) kriterium pro odhad optimalni lambda
