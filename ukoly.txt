@@ -31,4 +31,12 @@ do konzultace  23.4.
   4) už ne úkol - ft_freqanalysis, ft_sourceanalysis (http://www.fieldtriptoolbox.org/tutorial/beamformer)
  
   cíl: lokalizovat pøedem známý zdroj, eventuálnì více zdrojù (celý hippocampus)
+
+do konzultace 14.5. 
+ 
+  1) zkontrolovat souøadné systémy a zobrazit zdroje (ft_sourceplot) v MRI pros - hotovo
+   
+  2) zobrazit rozparcelované zdroje (existuje tutoriál na stránkách FT/ ft_sourceparcelate) - hotovo
+ 
+  3) zkusit rùzné hodnoty cfg.lamda (source analysis) - hotovo
 	  

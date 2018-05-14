@@ -12,13 +12,13 @@ load('sourcemodel_atlas'); % sourcemodel + atlas = indexované zdroje
 load('leadfield'); % leadfield pro všechny zdroje (NUDZ elektrody)
 
 %% Naètení atlasu
-% file = 'SRC/CBWJ13_P80_indexed_volume/CBWJ13_P80_indexed_volume.nii';
-% atlas = ft_read_atlas(file);
-% atlas.brick0label  = cellstr(labels.Name');
+file = 'SRC/CBWJ13_P80_indexed_volume/CBWJ13_P80_indexed_volume.nii';
+atlas = ft_read_atlas(file);
+atlas.brick0label  = cellstr(labels.Name');
 %% Podvzorkování atlasu
-% cfg            = [];
-% cfg.downsample = 4; % Podvzorkování 4x ... 16 voxely -> 1 voxel
-% [atlas4down]      = ft_volumedownsample(cfg,atlas); % Pro použitelnou velikost 
+cfg            = [];
+cfg.downsample = 4; % Podvzorkování 4x ... 16 voxely -> 1 voxel
+[atlas4down]      = ft_volumedownsample(cfg,atlas); % Pro použitelnou velikost 
 atlas4down.unit='mm';
 %% Zobrazení atlasu
 % cfg = [];
@@ -38,10 +38,10 @@ atlas4down.unit='mm';
 
 
 %% Pøiøazení atlasu k sourcemodelu = indexování zdrojù
-% cfg = []; 
-% cfg.interpmethod = 'nearest'; 
-% cfg.parameter = 'brick0'; 
-% sourcemodel_atlas = ft_sourceinterpolate(cfg, atlas4down, sourcemodel); 
+cfg = []; 
+cfg.interpmethod = 'nearest'; 
+cfg.parameter = 'brick0'; 
+sourcemodel_atlas = ft_sourceinterpolate(cfg, atlas4down, sourcemodel); 
 
 %% Headmodel + zdroje vybrané oblasti
 oblast = 11;
@@ -49,8 +49,8 @@ indx = find(sourcemodel_atlas.brick0==oblast);
 figure('Name',labels.Name{oblast});
 hold on;
 scatter3(gridinside(indx,1),gridinside(indx,2),gridinside(indx,3),...
-        'MarkerEdgeColor','k',...
-        'MarkerFaceColor',[labels.Red(oblast)/255 labels.Green(oblast)/255 labels.Blue(oblast)/255]);
+       'MarkerEdgeColor','k',...
+       'MarkerFaceColor',[labels.Red(oblast)/255 labels.Green(oblast)/255 labels.Blue(oblast)/255]);
 ft_plot_mesh(mesh,'surfaceonly','yes','facealpha',0.2,'edgealpha',0.2);
 hold off;
 %% Grid barevnì odlišené oblasti
@@ -84,12 +84,12 @@ zdroj_leadfield  = leadfield.leadfield(zdroj); % Pro NUDZ elektrody
 zdroj_leadfield  = zdroj_leadfield{1};
 signal_leadfield = cell(1,length(signal));
 
-maska = [0 0 1]; % V jakých osách jde signál [x y z];
+maska = [1 0 0]; % V jakých osách jde signál [x y z];
 
 for i=1:length(signal)
     signal_leadfield{i} = signal(i)*zdroj_leadfield;
 end
-
+%figure('rend','painters','pos',[10 10 900 600])
 figure('Name',labels.Name{oblast});
 hold on
 subplot(2,2,1)
@@ -104,10 +104,10 @@ text(0.5,6,0,'+Y');
 text(0,-11,0,'-Y');
 
 
-for i=1:length(signal)
+for i=1:200 %length(signal)
     potencial = maska*(signal_leadfield{i})';
     subplot(2,2,1)
-    title('potenciál mezi elektrodami + osy + zdroj');
+    title('Interpolovaný potenciál mezi elektrodami');
     ft_plot_topo3d(leadfield.cfg.elec.chanpos,potencial,'facealpha',0.6,'refine',1); % NUDZ
     view(0,90);
     subplot(2,2,2)
@@ -116,9 +116,9 @@ for i=1:length(signal)
     ft_plot_topo3d(leadfield.cfg.elec.chanpos,potencial,'facealpha',0.6,'refine',1); % NUDZ
     text(0,6,8,'+Y');
     text(0,-11.5,8,'-Y');
-    
-    if i<90
-    view(i,90-i);
+    colorbar
+    if i<190 & i>100
+    view(i-100,190-i);
     end
     
     line(zeros(1,200),linspace(-10,6,200),8*ones(1,200),'LineWidth',2,'Color','g');
@@ -129,13 +129,21 @@ for i=1:length(signal)
     subplot(2,2,3:4);
     if i>100
     plot(i-50:i+50,signal(i-50:i+50));
-    title('Prùbìh zdroje');
+    title('Cosinus 40 Hz s šumem');
     line([i i],[-max(signal) max(signal)],'Color','r');
     xlim([i-50 i+50]);
+    xlabel('Èasový vzorek (-)');
+    ylabel('Amplituda (-)');
     end
-    pause(0.1);
+    pause(0.01);
+    F(i)= getframe(gcf);
 end
 
+% vidObj = VideoWriter('potencial.avi');
+% vidObj.FrameRate = 10
+% open(vidObj);
+% writeVideo(vidObj,B);
+% close(vidObj);
 
 
 
