@@ -5,7 +5,7 @@ load('mesh4down');
 load('headmodel4down');
 elec = [];
 nsurfpoint = 5870; % Poèet povrchových bodù
-skip = 20; % Kolikátý bod zahrnout do výpoètu
+skip = 100; % Kolikátý bod zahrnout do výpoètu
 k = 1;
 elec.elecpos = [];
 for i=1:skip:nsurfpoint

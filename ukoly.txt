@@ -40,3 +40,12 @@ do konzultace 14.5.
  
   3) zkusit rùzné hodnoty cfg.lamda (source analysis) - hotovo
 	  
+do konzultace 11.6.
+
+  1) zobrazit budici (umele) zdroje v sourceplot za ucelem porovnani s lokalizovanymi (ne-parcelovanymi) zdroji
+  
+  2) lokalizovat pomoci MNE, DICS pro rùzné úrovnì labmda - ulozit obrazky (bod 1)
+
+  3) vsechny vypocty provadet na celem pokryti mozku elektrodami (body 1 a 2)
+
+  4) nastudovat CV (GCV) kriterium pro odhad optimalni lambda

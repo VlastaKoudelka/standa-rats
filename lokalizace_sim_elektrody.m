@@ -1,18 +1,19 @@
+%% Lokalizace zdrojù s více simulovanými povrchovými elektrodami
 clc;clear;close all;
 ft_defaults;
 %% Naètení potøebných souborù
 load('mesh4down'); % mesh
 load('headmodel4down'); % headmodel
-load('elec'); % NUDZ elektrody
 load('gridinside'); % Grid uvnitø mozku
 load('SRC/CBWJ13_P80_indexed_volume/lut.mat'); % lut pro atlas
 load('atlas4down'); % atlas podvzorkovaný 4x
-load('sourcemodel'); % sourcemodel
 load('sourcemodel_atlas'); % sourcemodel + atlas = indexované zdroje
-load('leadfield'); % leadfield pro všechny zdroje (NUDZ elektrody)
 load('mri_segmented'); % mri mozku potkana segmentované
 load('mri'); % nesegmentované mri mozku potkana
 load('mri4down'); % podvzorkované nesegmentované mri mozku potkana
+load('sourcemodel_sim'); % Hustší sourcemodel
+load('leadfield_sim'); % Pro simulované elektrody
+load('elec_sim'); % Simulované elektrody
 
 %% Generování cosinusovky se SNR
 oblast = 11; % index oblasti (11...hippocampus)
@@ -38,16 +39,30 @@ switch cela % Výbìr jestli jeden zdroj (0) nebo celá oblast zdrojù (1)
         zdroj_leadfield  = leadfield.leadfield(zdroj); % Pro NUDZ elektrody
         zdroj_leadfield  = zdroj_leadfield{1};
         signal_leadfield = cell(1,length(signal)); % Definování promìnné typu cell
-        potencial        = zeros(12,length(signal)); % Alokace pamìti pro èasovou øadu ne * nt
+        potencial        = zeros(59,length(signal)); % Alokace pamìti pro èasovou øadu ne * nt
 
         for i=1:length(signal)
             signal_leadfield{i} = signal(i)*zdroj_leadfield; % Pronásobení vzorkù signálu s leadfield
             potencial(:,i)      = moment*(signal_leadfield{i})'; % Pronásobení maskou pro urèení momentù
         end
         
+        % Umístìní simulovaného zdroje a elektrod
+                figure('Name','Mesh + eldy + osy potencial')
+                hold on
+                ft_plot_sens(elec,'style','r.');
+                ft_plot_mesh(mesh,'surfaceonly','yes','facealpha',0.2,'edgealpha',0.2) ;
+                line(linspace(-13,13,200),ones(1,200)*sourcemodel.pos(zdroj,2),ones(1,200)*sourcemodel.pos(zdroj,3),'LineWidth',2,'Color','r');
+                line(ones(1,200)*sourcemodel.pos(zdroj,1),linspace(-20,15,200),ones(1,200)*sourcemodel.pos(zdroj,3),'LineWidth',2,'Color','g');
+                line(ones(1,200)*sourcemodel.pos(zdroj,1),ones(1,200)*sourcemodel.pos(zdroj,2),linspace(-10,10,200),'LineWidth',2,'Color','b');
+                for i=1:length(elec.label)
+                text(elec.pnt(i,1),elec.pnt(i,2),elec.pnt(i,3),elec.label(i),'HorizontalAlignment','left','FontSize',8);
+                end
+                view(0,90);
+
+                hold off
     case 1
                 zdroj_leadfield  = leadfield.leadfield(indx); % Pro NUDZ elektrody
-                potencial        = zeros(12,length(signal)); % Alokace pamìti pro èasovou øadu ne * nt
+                potencial        = zeros(59,length(signal)); % Alokace pamìti pro èasovou øadu ne * nt
                 
                 for i = 1:length(zdroj_leadfield) % Projde leadfield všech zdrojù vybrané oblasti
                    disp(i);
@@ -56,9 +71,18 @@ switch cela % Výbìr jestli jeden zdroj (0) nebo celá oblast zdrojù (1)
                        potencial(:,j)        = potencial(:,j) + (moment*(signal_leadfield)')'; % Pronásobení vektorem momentù a pøiètení potenciálu k pøedchozím
                    end
                 end
+                figure('Name',labels.Name{oblast});
+                hold on;
+                scatter3(gridinside(indx,1),gridinside(indx,2),gridinside(indx,3),...
+                  'MarkerEdgeColor','k',...
+                 'MarkerFaceColor',[labels.Red(oblast)/255 labels.Green(oblast)/255 labels.Blue(oblast)/255]);
+                ft_plot_mesh(mesh,'surfaceonly','yes','facealpha',0.2,'edgealpha',0.2);
+                                view(0,90);
 
+                hold off;
+                          
 end
-%% Fieldtrip format
+%% Fieldtrip formát
 time = (1:length(potencial))/fvz; % Celkový èasový vektor
 
 data         = [];
@@ -90,46 +114,58 @@ cfg.method            = 'dics';
 cfg.frequency         = 35;  
 cfg.grid              = sourcemodel; 
 cfg.headmodel         = headmodel;
-cfg.dics.projectnoise = 'yes';
-cfg.dics.lambda       = 0.05;
+cfg.dics.projectnoise  = 'yes';
+cfg.dics.lambda        = '5%';
 cfg.elec              = elec;
 
 sourcePost_nocon      = ft_sourceanalysis(cfg, freq);
 
-%% Interpolace ze sourcemodel na MRI (volume)
-
+% Interpolace ze sourcemodel na MRI (volume)
 cfg = [];
 cfg.interpmethod = 'nearest'; % metoda interpolace
 cfg.parameter = 'pow'; % power spektrum jako interpolované hodnoty
-sourceInt = ft_sourceinterpolate(cfg,sourcePost_nocon,atlas4down);
-sourceInt.unit = 'mm';
-%% Parcelace zdrojù podle oblastí atlasu
+sourceInt = ft_sourceinterpolate(cfg,sourcePost_nocon,mridown);
 
-cfg = [];
-cfg.method = 'mean'; % støední hodnota
-cfg.parcellation = 'brick0';
-parcel = ft_sourceparcellate(cfg, sourceInt, atlas4down); % Parcelace zdrojù
-sourceInt.parcel = zeros(length(sourceInt.pow),1); % Vytvoøení nové promìnné pro uložení parcelovaných zdrojù
-for i=1:length(parcel.pow)
-      sourceInt.parcel(find(atlas4down.brick0==i))=parcel.pow(i); % Pøiøazení støední hodnoty oblasti do všech voxelù oblasti
-end
-%% Maska
 
+%% Maska - pro zobrazení oblasti použitím mask jako funparameter na anatomy mridown
 cfg = [];
 cfg.inputcoord = 'unknown';
 cfg.atlas = atlas4down;
 cfg.roi = atlas4down.brick0label(:);
 mask = ft_volumelookup(cfg, sourceInt); %Vytvoøení masky pro zobrazení zdrojù pouze v oblasti mozku
-
 sourceInt.mask = mask;
 
-%% Zobrazení
-cfg = [];
-cfg.method = 'vertex';
-cfg.funparameter = 'pow'; % parcel-rozparcelované zdroje/pow-originál interpolované
-%cfg.maskparameter = 'mask'; % maska
-%cfg.atlas = atlas4down;
-%cfg.mesh = mesh;
-ft_sourceplot(cfg,sourcePost_nocon)
+% Vymezení zdrojù pouze na mozek - chyba interpolace
+indexy = find(sourceInt.mask(:,:,:) == false);
+sourceInt.pow(indexy)=0;
 
+%% Zobrazení do MRI
+cfg = [];
+%cfg.location = [x y z]
+cfg.method = 'slice';
+cfg.funparameter = 'pow'; % parcel-rozparcelované zdroje/pow-originál interpolované
+ft_sourceplot(cfg,sourceInt,mridown)
+hold on
+text(100,200,'lambda 5%','Color','White')
+hold off
+
+
+% %% Zobrazení ve zdrojích
+% cfg = [];
+% cfg.method = 'vertex';
+% cfg.funparameter = 'pow'; % parcel-rozparcelované zdroje/pow-originál interpolované
+% hold on
+% ft_sourceplot(cfg,sourcePost_nocon)
+% ft_plot_mesh(mesh,'surfaceonly','yes','facealpha',0.1,'edgealpha',0.1) ;
+% if zdroj
+% line(linspace(-13,13,200),ones(1,200)*sourcemodel.pos(zdroj,2),ones(1,200)*sourcemodel.pos(zdroj,3),'LineWidth',2,'Color','r');
+% line(ones(1,200)*sourcemodel.pos(zdroj,1),linspace(-20,15,200),ones(1,200)*sourcemodel.pos(zdroj,3),'LineWidth',2,'Color','g');
+% line(ones(1,200)*sourcemodel.pos(zdroj,1),ones(1,200)*sourcemodel.pos(zdroj,2),linspace(-10,10,200),'LineWidth',2,'Color','b');
+% end
+% hold off
+
+% %% Zdroje s velkými chybovými hodnotami
+% zdroj_err = sourcePost_nocon.avg.pow;
+% max_err = max(zdroj_err);
+% err_ind = find(zdroj_err >=0.01* max_err);
 
